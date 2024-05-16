@@ -1,3 +1,4 @@
+from pathlib import Path
 ###Edificio###
 # Clase Edificio
 edificios = [] #Aquí almacenaremos a todos nuestros edificios
@@ -24,7 +25,7 @@ class Edificio:
         repisa = input("Dame el número de repisas del edificio: ")
         edificio_nuevo = Edificio(repisa, ubicacion, id_edificio)
         edificios.append(edificio_nuevo)#Agrega el nuevo edificio creado al arreglo de edificios
-        edificio_nuevo.guardar_info()#Guardar la info en el txt
+        #edificio_nuevo.guardar_info()#Guardar la info en el txt
         print("Edificio creado y guardado exitosamente")
 
 
@@ -70,10 +71,35 @@ class Edificio:
     def get_repisa_edificio(self):
         return self.__repisa
     
-    def guardar_info(self):
+    """def guardar_info(self):
         with open('edificios.txt', 'a') as file:
             info = f"ID: {self.get_id_edificio()}, Ubicación: {self.get_ubicacion_edificio()}, Repisas: {self.get_repisa_edificio()}\n"
-            file.write(info)
+            file.write(info)"""
+
+ruta_archivo_edificio="edificios.txt"
+
+def crear_edificios_por_archivo (ruta_archivo_edificio):
+    edificios=[]
+    ruta_archivo_edificio=Path(ruta_archivo_edificio)
+    print(ruta_archivo_edificio.resolve())
+    if (ruta_archivo_edificio.exists()):
+        with open(ruta_archivo_edificio, 'r') as archivo:
+            encabezados = archivo.readline().strip().split(',')
+            for linea in archivo:
+                repisa, ubicacion, id_edificio=linea.strip().split(',')
+                edificios.append(Edificio(repisa, ubicacion, id_edificio))
+    else:
+        print("La ruta que buscas acceder es incorrecta")
+        return edificios
+    return edificios
+
+def actualizar_edificios(lista_edificios):
+    ruta_archivo_edificio=Path("edificios.txt")
+    print(ruta_archivo_edificio.resolve())
+    with ruta_archivo_edificio.open('w') as archivo:
+        archivo.write("Repisa,Ubicacion,Id_Edificio")
+        for edificio in edificios:
+            archivo.write(f"{edificio.get_repisa_edificio},{edificio.get_ubicacion_edificio},{edificio.get_id_edificio}")
 
 ###Pallet###
 inventario = [] #Aquí almacenaremos el inventario de las pallets
