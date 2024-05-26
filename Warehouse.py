@@ -1,5 +1,8 @@
 from pathlib import Path
-
+import sys
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel, QLineEdit, QComboBox, QInputDialog, QMessageBox
+from PyQt6.QtGui import QFont, QColor
+from PyQt6.QtCore import Qt
 ###Edificios###
 edificios = []
 
@@ -447,7 +450,7 @@ def cliente_menu(clientes):
             break
         else:
             print("Opción no válida. Intente nuevamente.")
-
+'''
 #MAIN
 cargar_edificios(edificios)
 cargar_pallets(inventario)
@@ -472,3 +475,152 @@ while True:
         break
     else:
         print("Opción no válida. Intente nuevamente.")
+'''
+#TOODO EL PROCESO DE LA CREACIÓN DEL GUI 
+
+COLORS = {
+    "background": "#fafafa",
+    "text": "#101010",
+    "button": "#587962",
+    "button_text": "#fafafa",
+    "nav_bar": "#7a9983",
+    "nav_bar_text": "#fafafa",
+}
+
+FONTS = {
+    "title": QFont("Libre Franklin", 14, QFont.Weight.Bold),
+    "text": QFont("Merriweather", 12),
+    "menu": QFont("Pt Serif", 12, QFont.Weight.Bold),
+}
+
+# Ventana Principal
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.iniciar_ventana()
+
+    def iniciar_ventana(self):
+        self.setGeometry(100, 100, 800, 600)
+        self.setWindowTitle("Gestión de Almacén")
+        self.setStyleSheet(f"background-color: {COLORS['background']}")
+
+        central_widget = QWidget(self)
+        layout = QVBoxLayout(central_widget)
+
+        # Añadir título
+        title = QLabel("Menú Principal del Almacén")
+        title.setFont(FONTS["title"])
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title.setStyleSheet(f"color: {COLORS['text']}")
+        layout.addWidget(title)
+
+        # Añadir botones
+        btn_edificios = QPushButton("Edificios")
+        btn_edificios.setFont(FONTS["text"])
+        btn_edificios.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_edificios.clicked.connect(self.show_edificio_menu)
+        layout.addWidget(btn_edificios)
+
+        btn_pallets = QPushButton("Pallets")
+        btn_pallets.setFont(FONTS["text"])
+        btn_pallets.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_pallets.clicked.connect(self.show_pallet_menu)
+        layout.addWidget(btn_pallets)
+
+        btn_clientes = QPushButton("Clientes")
+        btn_clientes.setFont(FONTS["text"])
+        btn_clientes.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_clientes.clicked.connect(self.show_cliente_menu)
+        layout.addWidget(btn_clientes)
+
+        # Establecer el widget central con el layout
+        self.setCentralWidget(central_widget)
+
+        self.show()
+    
+    def show_edificio_menu(self):
+        self.edificio_menu = EdificioMenu()
+        self.edificio_menu.show()
+
+    def show_pallet_menu(self):
+        self.pallet_menu = PalletMenu()
+        self.pallet_menu.show()
+
+    def show_cliente_menu(self):
+        self.cliente_menu = ClienteMenu()
+        self.cliente_menu.show()
+
+
+
+class EdificioMenu(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Gestión de Edificios")
+        self.setGeometry(150, 150, 600, 400)
+        self.setStyleSheet(f"background-color: {COLORS['background']}")
+
+        central_widget = QWidget(self)
+        layout = QVBoxLayout(central_widget)
+
+        title = QLabel("Gestión de Edificios")
+        title.setFont(FONTS["title"])
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title.setStyleSheet(f"color: {COLORS['text']}")
+        layout.addWidget(title)
+
+        btn_create = QPushButton("Crear Edificio")
+        btn_create.setFont(FONTS["text"])
+        btn_create.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        layout.addWidget(btn_create)
+
+        self.setCentralWidget(central_widget)
+
+class PalletMenu(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Gestión de Pallets")
+        self.setGeometry(150, 150, 600, 400)
+        self.setStyleSheet(f"background-color: {COLORS['background']}")
+
+        central_widget = QWidget(self)
+        layout = QVBoxLayout(central_widget)
+
+        title = QLabel("Gestión de Pallets")
+        title.setFont(FONTS["title"])
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title.setStyleSheet(f"color: {COLORS['text']}")
+        layout.addWidget(title)
+
+        btn_create = QPushButton("Registrar Pallet")
+        btn_create.setFont(FONTS["text"])
+        btn_create.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        layout.addWidget(btn_create)
+
+        self.setCentralWidget(central_widget)
+
+class ClienteMenu(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Gestión de Clientes")
+        self.setGeometry(150, 150, 600, 400)
+        self.setStyleSheet(f"background-color: {COLORS['background']}")
+
+        central_widget = QWidget(self)
+        layout = QVBoxLayout(central_widget)
+
+        title = QLabel("Gestión de Clientes")
+        title.setFont(FONTS["title"])
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title.setStyleSheet(f"color: {COLORS['text']}")
+        layout.addWidget(title)
+
+        btn_create = QPushButton("Crear Cliente")
+        btn_create.setFont(FONTS["text"])
+        btn_create.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        layout.addWidget(btn_create)
+
+        self.setCentralWidget(central_widget)
+
+app = QApplication(sys.argv)
+main_window = MainWindow()
+sys.exit(app.exec())
