@@ -507,14 +507,12 @@ class MainWindow(QMainWindow):
         central_widget = QWidget(self)
         layout = QVBoxLayout(central_widget)
 
-        # Añadir título
         title = QLabel("Menú Principal del Almacén")
         title.setFont(FONTS["title"])
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title.setStyleSheet(f"color: {COLORS['text']}")
         layout.addWidget(title)
 
-        # Añadir botones
         btn_edificios = QPushButton("Edificios")
         btn_edificios.setFont(FONTS["text"])
         btn_edificios.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
@@ -533,7 +531,6 @@ class MainWindow(QMainWindow):
         btn_clientes.clicked.connect(self.show_cliente_menu)
         layout.addWidget(btn_clientes)
 
-        # Establecer el widget central con el layout
         self.setCentralWidget(central_widget)
 
         self.show()
@@ -573,6 +570,26 @@ class EdificioMenu(QMainWindow):
         btn_create.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
         layout.addWidget(btn_create)
 
+        btn_create1 = QPushButton("Eliminar Edificio")
+        btn_create1.setFont(FONTS["text"])
+        btn_create1.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        layout.addWidget(btn_create1)
+
+        btn_create2 = QPushButton("Mostrar Edificios")
+        btn_create2.setFont(FONTS["text"])
+        btn_create2.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        layout.addWidget(btn_create2)
+
+        btn_create3 = QPushButton("Mostrar información de un edificio")
+        btn_create3.setFont(FONTS["text"])
+        btn_create3.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        layout.addWidget(btn_create3)
+
+        btn_create4 = QPushButton("Volver al menú principal")
+        btn_create4.setFont(FONTS["text"])
+        btn_create4.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        layout.addWidget(btn_create4)
+
         self.setCentralWidget(central_widget)
 
 class PalletMenu(QMainWindow):
@@ -596,6 +613,31 @@ class PalletMenu(QMainWindow):
         btn_create.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
         layout.addWidget(btn_create)
 
+        btn_create1 = QPushButton("Modificar edificio de un Pallet")
+        btn_create1.setFont(FONTS["text"])
+        btn_create1.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        layout.addWidget(btn_create1)
+
+        btn_create2 = QPushButton("Eliminar Pallet")
+        btn_create2.setFont(FONTS["text"])
+        btn_create2.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        layout.addWidget(btn_create2)
+
+        btn_create3 = QPushButton("Mostrar información de los Pallets")
+        btn_create3.setFont(FONTS["text"])
+        btn_create3.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        layout.addWidget(btn_create3)
+
+        btn_create4 = QPushButton("Mostrar información de pallet")
+        btn_create4.setFont(FONTS["text"])
+        btn_create4.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        layout.addWidget(btn_create4)
+
+        btn_create5 = QPushButton("Volver al menú principal")
+        btn_create5.setFont(FONTS["text"])
+        btn_create5.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        layout.addWidget(btn_create5)
+
         self.setCentralWidget(central_widget)
 
 class ClienteMenu(QMainWindow):
@@ -618,6 +660,26 @@ class ClienteMenu(QMainWindow):
         btn_create.setFont(FONTS["text"])
         btn_create.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
         layout.addWidget(btn_create)
+
+        btn_create1 = QPushButton("Mostrar información de Cliente")
+        btn_create1.setFont(FONTS["text"])
+        btn_create1.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        layout.addWidget(btn_create1)
+
+        btn_create2 = QPushButton("Mostrar información de todos los Clientes")
+        btn_create2.setFont(FONTS["text"])
+        btn_create2.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        layout.addWidget(btn_create2)
+
+        btn_create3 = QPushButton("Eliminar Cliente")
+        btn_create3.setFont(FONTS["text"])
+        btn_create3.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        layout.addWidget(btn_create3)
+
+        btn_create4 = QPushButton("Volver al menú principal")
+        btn_create4.setFont(FONTS["text"])
+        btn_create4.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        layout.addWidget(btn_create4)
 
         self.setCentralWidget(central_widget)
 
