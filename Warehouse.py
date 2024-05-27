@@ -11,50 +11,26 @@ class Edificio:
         self.__id_edificio = id_edificio
         self.__ubicacion = ubicacion
         self.__repisa = repisa
-    
+
     def get_id_edificio(self):
         return self.__id_edificio
-    
+
     def get_ubicacion_edificio(self):
         return self.__ubicacion
-    
+
     def get_repisa_edificio(self):
         return self.__repisa
-    
+
     def guardar_info(self, ruta_archivo='edificios.txt'):
         archivo = Path(ruta_archivo)
         encabezado = "Repisa|Ubicacion|ID\n"
         if not archivo.exists():
             with archivo.open('w', encoding='utf-8') as file:
                 file.write(encabezado)
-        
+
         with archivo.open('a', encoding='utf-8') as file:
             info = f"{self.__repisa}|{self.__ubicacion}|{self.__id_edificio}\n"
             file.write(info)
-
-    def crear_edificio(self, edificios):
-        while True:
-            id_edificio = input("Dame el ID del edificio: ")
-            if self.validar_edificio(id_edificio, edificios):
-                print("¡El ID ya existe! Introduce un ID diferente.")
-            else:
-                break
-
-        ubicacion = input("Dame la ubicación del edificio: ")
-        repisa = input("Dame el número de repisas del edificio: ")
-        edificio_nuevo = Edificio(repisa, ubicacion, id_edificio)
-        edificios.append(edificio_nuevo)
-        edificio_nuevo.guardar_info()
-        print("Edificio creado y guardado exitosamente")
-
-    def eliminar_edificio(self, edificios, ruta_archivo='edificios.txt'):
-        for edif in edificios:
-            if edif.get_id_edificio() == self.__id_edificio:
-                edificios.remove(edif)
-                guardar_edificios(ruta_archivo, edificios)
-                print(f"Edificio con ID {self.__id_edificio} eliminado.")
-                return
-        print("Edificio no encontrado. No se pudo eliminar.")
 
     def validar_edificio(self, id_edificio, edificios):
         return any(edif.get_id_edificio() == id_edificio for edif in edificios)
@@ -67,6 +43,15 @@ class Edificio:
             if edif.get_id_edificio() == id_edificio:
                 return edif
         return None
+    
+    def eliminar(self, edificios, ruta_archivo='edificios.txt'):
+        for edif in edificios:
+            if edif.get_id_edificio() == self.__id_edificio:
+                edificios.remove(edif)
+                guardar_edificios(ruta_archivo, edificios)
+                print(f"Edificio con ID {self.__id_edificio} eliminado.")
+                return
+        print("Edificio no encontrado. No se pudo eliminar.")
 
 def cargar_edificios(edificios, ruta_archivo='edificios.txt'):
     ruta = Path(ruta_archivo)
@@ -107,7 +92,7 @@ class Pallet:
 
     def get_id_pallet(self):
         return self.__id_pallet
-    
+
     def guardar_info(self, ruta_archivo='pallets.txt'):
         archivo = Path(ruta_archivo)
         encabezado = "ID Pallet|ID Cliente|ID Edificio|Fecha Ingreso|Fecha Egreso\n"
@@ -119,52 +104,8 @@ class Pallet:
             info = f"{self.__id_pallet}|{self.id_cliente}|{self.id_edificio}|{self.fecha_ingreso}|{self.fecha_egreso}\n"
             file.write(info)
 
-    def crear_pallet(self, inventario, clientes, edificios):
-        if not clientes:
-            print("No hay clientes disponibles. Crea un cliente antes de crear un pallet.")
-            return
-        if not edificios:
-            print("No hay edificios disponibles. Crea un edificio antes de crear un pallet.")
-            return
-        
-        while True:
-            id_pallet = input("Ingresa el ID del pallet: ")
-            if self.validar_pallet(id_pallet, inventario):
-                print("¡El ID ya existe! Introduce un ID diferente.")
-                continue
-            
-            print("Clientes disponibles:")
-            mostrar_clientes(clientes)
-            id_cliente = input("Ingresa el ID del cliente: ")
-            if not self.validar_cliente(id_cliente, clientes):
-                print("¡El cliente no existe! Introduce un cliente válido.")
-                continue
-            
-            print("Edificios disponibles:")
-            mostrar_edificios(edificios)
-            id_edificio = input("Ingresa el ID del edificio: ")
-            if not self.validar_edificio(id_edificio, edificios):
-                print("¡El edificio no existe! Introduce un edificio válido.")
-                continue
-            
-            fecha_ingreso = input("Ingresa la fecha de ingreso: ")
-            pallet_nuevo = Pallet(id_pallet, id_cliente, id_edificio, fecha_ingreso)
-            inventario.append(pallet_nuevo)
-            pallet_nuevo.guardar_info()
-            print("Pallet creada y guardada exitosamente!")
-            break
-
-    def eliminar_pallet(self, inventario, ruta_archivo='pallets.txt'):
-        for pallet in inventario:
-            if pallet.get_id_pallet() == self.__id_pallet:
-                inventario.remove(pallet)
-                guardar_pallets(ruta_archivo, inventario)
-                print(f"Pallet con ID {self.__id_pallet} eliminada.")
-                return
-        print("Pallet no encontrada. No se pudo eliminar.")
-
     def modificar_id_edificio(self, nuevo_edificio_id, inventario, edificios):
-        if self.validar_edificio(nuevo_edificio_id, edificios):
+        if any(edificio.get_id_edificio() == nuevo_edificio_id for edificio in edificios):
             self.id_edificio = nuevo_edificio_id
             guardar_pallets('pallets.txt', inventario)
             print(f"ID del edificio para la pallet {self.__id_pallet} actualizado a {nuevo_edificio_id}")
@@ -497,6 +438,9 @@ FONTS = {
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        cargar_edificios(edificios)
+        cargar_pallets(inventario)
+        cargar_clientes(clientes)
         self.iniciar_ventana()
 
     def iniciar_ventana(self):
@@ -531,27 +475,38 @@ class MainWindow(QMainWindow):
         btn_clientes.clicked.connect(self.show_cliente_menu)
         layout.addWidget(btn_clientes)
 
+        btn_salir = QPushButton("Salir")
+        btn_salir.setFont(FONTS["text"])
+        btn_salir.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_salir.clicked.connect(self.close_application)
+        layout.addWidget(btn_salir)
+
         self.setCentralWidget(central_widget)
 
         self.show()
     
     def show_edificio_menu(self):
-        self.edificio_menu = EdificioMenu()
+        self.close()
+        self.edificio_menu = EdificioMenu(self)
         self.edificio_menu.show()
 
     def show_pallet_menu(self):
-        self.pallet_menu = PalletMenu()
+        self.close()
+        self.pallet_menu = PalletMenu(self)
         self.pallet_menu.show()
 
     def show_cliente_menu(self):
-        self.cliente_menu = ClienteMenu()
+        self.close()
+        self.cliente_menu = ClienteMenu(self)
         self.cliente_menu.show()
-
-
+    
+    def close_application(self):
+        sys.exit()
 
 class EdificioMenu(QMainWindow):
-    def __init__(self):
+    def __init__(self, main_window):
         super().__init__()
+        self.main_window = main_window
         self.setWindowTitle("Gestión de Edificios")
         self.setGeometry(150, 150, 600, 400)
         self.setStyleSheet(f"background-color: {COLORS['background']}")
@@ -568,33 +523,86 @@ class EdificioMenu(QMainWindow):
         btn_create = QPushButton("Crear Edificio")
         btn_create.setFont(FONTS["text"])
         btn_create.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_create.clicked.connect(self.crear_edificio)
         layout.addWidget(btn_create)
 
-        btn_create1 = QPushButton("Eliminar Edificio")
-        btn_create1.setFont(FONTS["text"])
-        btn_create1.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        layout.addWidget(btn_create1)
+        btn_delete = QPushButton("Eliminar Edificio")
+        btn_delete.setFont(FONTS["text"])
+        btn_delete.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_delete.clicked.connect(self.eliminar_edificio_menu)
+        layout.addWidget(btn_delete)
 
-        btn_create2 = QPushButton("Mostrar Edificios")
-        btn_create2.setFont(FONTS["text"])
-        btn_create2.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        layout.addWidget(btn_create2)
+        btn_show_all = QPushButton("Mostrar Edificios")
+        btn_show_all.setFont(FONTS["text"])
+        btn_show_all.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_show_all.clicked.connect(self.mostrar_edificios)
+        layout.addWidget(btn_show_all)
 
-        btn_create3 = QPushButton("Mostrar información de un edificio")
-        btn_create3.setFont(FONTS["text"])
-        btn_create3.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        layout.addWidget(btn_create3)
+        btn_show_info = QPushButton("Mostrar información de un edificio")
+        btn_show_info.setFont(FONTS["text"])
+        btn_show_info.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_show_info.clicked.connect(self.mostrar_info_edificio)
+        layout.addWidget(btn_show_info)
 
-        btn_create4 = QPushButton("Volver al menú principal")
-        btn_create4.setFont(FONTS["text"])
-        btn_create4.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        layout.addWidget(btn_create4)
+        btn_back = QPushButton("Volver al menú principal")
+        btn_back.setFont(FONTS["text"])
+        btn_back.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_back.clicked.connect(self.back_to_main)
+        layout.addWidget(btn_back)
 
         self.setCentralWidget(central_widget)
 
+    def back_to_main(self):
+        self.close() 
+        self.main_window.show()  
+
+    def crear_edificio(self):
+        id_edificio, ok = QInputDialog.getText(self, "Crear Edificio", "Ingrese el ID del edificio:")
+        if ok:
+            ubicacion, ok = QInputDialog.getText(self, "Crear Edificio", "Ingrese la ubicación del edificio:")
+            if ok:
+                repisa, ok = QInputDialog.getText(self, "Crear Edificio", "Ingrese el número de repisas del edificio:")
+                if ok:
+                    if not Edificio(0, 0, 0).validar_edificio(id_edificio, edificios):
+                        edificio_nuevo = Edificio(repisa, ubicacion, id_edificio)
+                        edificios.append(edificio_nuevo)
+                        edificio_nuevo.guardar_info()
+                        QMessageBox.information(self, "Éxito", "Edificio creado y guardado exitosamente")
+                    else:
+                        QMessageBox.warning(self, "Error", "¡El ID ya existe! Introduce un ID diferente.")
+
+    def eliminar_edificio_menu(self):
+        id_edificio, ok = QInputDialog.getText(self, "Eliminar Edificio", "Ingrese el ID del edificio a eliminar:")
+        if ok:
+            edificio = Edificio(0, 0, id_edificio).buscar_edificio(id_edificio, edificios)
+            if edificio:
+                edificio.eliminar(edificios)
+                QMessageBox.information(self, "Éxito", f"Edificio con ID {id_edificio} eliminado exitosamente.")
+            else:
+                QMessageBox.warning(self, "Error", "Edificio no encontrado.")
+
+    def mostrar_edificios(self):
+        info = ""
+        for edif in edificios:
+            info += f"ID: {edif.get_id_edificio()}, Ubicación: {edif.get_ubicacion_edificio()}, Repisas: {edif.get_repisa_edificio()}\n"
+        if not info:
+            info = "No hay edificios guardados en el archivo."
+        QMessageBox.information(self, "Edificios", info)
+
+    def mostrar_info_edificio(self):
+        id_edificio, ok = QInputDialog.getText(self, "Mostrar Información de Edificio", "Ingrese el ID del edificio a consultar:")
+        if ok:
+            edificio = Edificio(0, 0, id_edificio).buscar_edificio(id_edificio, edificios)
+            if edificio:
+                info = edificio.obtener_info_edificio()
+                QMessageBox.information(self, "Información del Edificio", info)
+            else:
+                QMessageBox.warning(self, "Error", "Edificio no encontrado.")
+
 class PalletMenu(QMainWindow):
-    def __init__(self):
+    def __init__(self, main_window):
         super().__init__()
+        self.main_window = main_window
         self.setWindowTitle("Gestión de Pallets")
         self.setGeometry(150, 150, 600, 400)
         self.setStyleSheet(f"background-color: {COLORS['background']}")
@@ -611,38 +619,109 @@ class PalletMenu(QMainWindow):
         btn_create = QPushButton("Registrar Pallet")
         btn_create.setFont(FONTS["text"])
         btn_create.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_create.clicked.connect(self.crear_pallet)
         layout.addWidget(btn_create)
 
-        btn_create1 = QPushButton("Modificar edificio de un Pallet")
-        btn_create1.setFont(FONTS["text"])
-        btn_create1.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        layout.addWidget(btn_create1)
+        btn_modify = QPushButton("Modificar Edificio de un Pallet")
+        btn_modify.setFont(FONTS["text"])
+        btn_modify.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_modify.clicked.connect(self.modificar_pallet)
+        layout.addWidget(btn_modify)
 
-        btn_create2 = QPushButton("Eliminar Pallet")
-        btn_create2.setFont(FONTS["text"])
-        btn_create2.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        layout.addWidget(btn_create2)
+        btn_delete = QPushButton("Eliminar Pallet")
+        btn_delete.setFont(FONTS["text"])
+        btn_delete.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_delete.clicked.connect(self.eliminar_pallet_menu)
+        layout.addWidget(btn_delete)
 
-        btn_create3 = QPushButton("Mostrar información de los Pallets")
-        btn_create3.setFont(FONTS["text"])
-        btn_create3.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        layout.addWidget(btn_create3)
+        btn_show_all = QPushButton("Mostrar Pallets")
+        btn_show_all.setFont(FONTS["text"])
+        btn_show_all.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_show_all.clicked.connect(self.mostrar_pallets)
+        layout.addWidget(btn_show_all)
 
-        btn_create4 = QPushButton("Mostrar información de pallet")
-        btn_create4.setFont(FONTS["text"])
-        btn_create4.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        layout.addWidget(btn_create4)
+        btn_show_info = QPushButton("Mostrar información de un pallet")
+        btn_show_info.setFont(FONTS["text"])
+        btn_show_info.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_show_info.clicked.connect(self.mostrar_info_pallet)
+        layout.addWidget(btn_show_info)
 
-        btn_create5 = QPushButton("Volver al menú principal")
-        btn_create5.setFont(FONTS["text"])
-        btn_create5.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        layout.addWidget(btn_create5)
+        btn_back = QPushButton("Volver al menú principal")
+        btn_back.setFont(FONTS["text"])
+        btn_back.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_back.clicked.connect(self.back_to_main)
+        layout.addWidget(btn_back)
 
         self.setCentralWidget(central_widget)
 
+    def back_to_main(self):
+        self.close() 
+        self.main_window.show()  
+
+    def crear_pallet(self):
+        id_pallet, ok = QInputDialog.getText(self, "Registrar Pallet", "Ingrese el ID del pallet:")
+        if ok:
+            id_cliente, ok = QInputDialog.getText(self, "Registrar Pallet", "Ingrese el ID del cliente:")
+            if ok:
+                id_edificio, ok = QInputDialog.getText(self, "Registrar Pallet", "Ingrese el ID del edificio:")
+                if ok:
+                    fecha_ingreso, ok = QInputDialog.getText(self, "Registrar Pallet", "Ingrese la fecha de ingreso:")
+                    if ok:
+                        if not Pallet(0, 0, 0, 0).validar_pallet(id_pallet, inventario):
+                            pallet_nuevo = Pallet(id_pallet, id_cliente, id_edificio, fecha_ingreso)
+                            inventario.append(pallet_nuevo)
+                            pallet_nuevo.guardar_info()
+                            QMessageBox.information(self, "Éxito", "Pallet registrado y guardado exitosamente")
+                        else:
+                            QMessageBox.warning(self, "Error", "¡El ID ya existe! Introduce un ID diferente.")
+
+    def modificar_pallet(self):
+        id_pallet, ok = QInputDialog.getText(self, "Modificar Pallet", "Ingrese el ID del pallet a modificar:")
+        if ok:
+            pallet = Pallet(0, 0, 0, 0).buscar_pallet(id_pallet, inventario)
+            if pallet is None:
+                QMessageBox.warning(self, "Error", "Pallet no encontrada")
+            else:
+                nuevo_edificio_id, ok = QInputDialog.getText(self, "Modificar Pallet", "Ingrese el nuevo ID del edificio para el pallet:")
+                if ok:
+                    if any(edificio.get_id_edificio() == nuevo_edificio_id for edificio in edificios):
+                        pallet.modificar_id_edificio(nuevo_edificio_id, inventario, edificios)
+                        QMessageBox.information(self, "Éxito", f"ID del edificio para la pallet {id_pallet} actualizado a {nuevo_edificio_id}")
+                    else:
+                        QMessageBox.warning(self, "Error", "El nuevo ID del edificio no es válido.")
+
+    def eliminar_pallet_menu(self):
+        id_pallet, ok = QInputDialog.getText(self, "Eliminar Pallet", "Ingrese el ID del pallet a eliminar:")
+        if ok:
+            pallet = Pallet(0, 0, 0, 0).buscar_pallet(id_pallet, inventario)
+            if pallet:
+                pallet.eliminar_pallet(inventario)
+                QMessageBox.information(self, "Éxito", f"Pallet con ID {id_pallet} eliminada exitosamente.")
+            else:
+                QMessageBox.warning(self, "Error", "Pallet no encontrada.")
+
+    def mostrar_pallets(self):
+        info = ""
+        for pallet in inventario:
+            info += f"ID Pallet: {pallet.get_id_pallet()}, ID Cliente: {pallet.id_cliente}, ID Edificio: {pallet.id_edificio}, Fecha Ingreso: {pallet.fecha_ingreso}, Fecha Egreso: {pallet.fecha_egreso}\n"
+        if not info:
+            info = "No hay pallets registradas."
+        QMessageBox.information(self, "Pallets", info)
+
+    def mostrar_info_pallet(self):
+        id_pallet, ok = QInputDialog.getText(self, "Mostrar Información de Pallet", "Ingrese el ID del pallet a consultar:")
+        if ok:
+            pallet = Pallet(0, 0, 0, 0).buscar_pallet(id_pallet, inventario)
+            if pallet:
+                info = pallet.obtener_info_pallet()
+                QMessageBox.information(self, "Información del Pallet", info)
+            else:
+                QMessageBox.warning(self, "Error", "Pallet no encontrada.")
+
 class ClienteMenu(QMainWindow):
-    def __init__(self):
+    def __init__(self, main_window):
         super().__init__()
+        self.main_window = main_window
         self.setWindowTitle("Gestión de Clientes")
         self.setGeometry(150, 150, 600, 400)
         self.setStyleSheet(f"background-color: {COLORS['background']}")
@@ -659,30 +738,85 @@ class ClienteMenu(QMainWindow):
         btn_create = QPushButton("Crear Cliente")
         btn_create.setFont(FONTS["text"])
         btn_create.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_create.clicked.connect(self.crear_cliente)
         layout.addWidget(btn_create)
 
-        btn_create1 = QPushButton("Mostrar información de Cliente")
-        btn_create1.setFont(FONTS["text"])
-        btn_create1.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        layout.addWidget(btn_create1)
+        btn_show_info = QPushButton("Mostrar información de Cliente")
+        btn_show_info.setFont(FONTS["text"])
+        btn_show_info.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_show_info.clicked.connect(self.mostrar_info_cliente)
+        layout.addWidget(btn_show_info)
 
-        btn_create2 = QPushButton("Mostrar información de todos los Clientes")
-        btn_create2.setFont(FONTS["text"])
-        btn_create2.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        layout.addWidget(btn_create2)
+        btn_show_all = QPushButton("Mostrar información de todos los Clientes")
+        btn_show_all.setFont(FONTS["text"])
+        btn_show_all.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_show_all.clicked.connect(self.mostrar_clientes)
+        layout.addWidget(btn_show_all)
 
-        btn_create3 = QPushButton("Eliminar Cliente")
-        btn_create3.setFont(FONTS["text"])
-        btn_create3.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        layout.addWidget(btn_create3)
+        btn_delete = QPushButton("Eliminar Cliente")
+        btn_delete.setFont(FONTS["text"])
+        btn_delete.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_delete.clicked.connect(self.eliminar_cliente_menu)
+        layout.addWidget(btn_delete)
 
-        btn_create4 = QPushButton("Volver al menú principal")
-        btn_create4.setFont(FONTS["text"])
-        btn_create4.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        layout.addWidget(btn_create4)
+        btn_back = QPushButton("Volver al menú principal")
+        btn_back.setFont(FONTS["text"])
+        btn_back.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        btn_back.clicked.connect(self.back_to_main)
+        layout.addWidget(btn_back)
 
         self.setCentralWidget(central_widget)
 
+    def back_to_main(self):
+        self.close()  
+        self.main_window.show() 
+
+    def crear_cliente(self):
+        id_cliente, ok = QInputDialog.getText(self, "Crear Cliente", "Ingrese el ID del cliente:")
+        if ok:
+            empresa, ok = QInputDialog.getText(self, "Crear Cliente", "Ingrese el nombre de la empresa:")
+            if ok:
+                cliente_ingreso, ok = QInputDialog.getText(self, "Crear Cliente", "Ingrese la fecha de ingreso del cliente:")
+                if ok:
+                    nacionalidad, ok = QInputDialog.getText(self, "Crear Cliente", "Ingrese la nacionalidad del cliente:")
+                    if ok:
+                        if not Cliente(0, 0, 0, 0).buscar_cliente(id_cliente, clientes):
+                            cliente_nuevo = Cliente(id_cliente, empresa, cliente_ingreso, nacionalidad)
+                            clientes.append(cliente_nuevo)
+                            cliente_nuevo.guardar_info()
+                            QMessageBox.information(self, "Éxito", "Cliente creado y guardado exitosamente")
+                        else:
+                            QMessageBox.warning(self, "Error", "¡El ID ya existe! Introduce un ID diferente.")
+
+    def mostrar_info_cliente(self):
+        id_cliente, ok = QInputDialog.getText(self, "Mostrar Información de Cliente", "Ingrese el ID del cliente a consultar:")
+        if ok:
+            cliente = Cliente(0, 0, 0, 0).buscar_cliente(id_cliente, clientes)
+            if cliente:
+                info = cliente.obtener_info_cliente()
+                QMessageBox.information(self, "Información del Cliente", info)
+            else:
+                QMessageBox.warning(self, "Error", "Cliente no encontrado.")
+
+    def mostrar_clientes(self):
+        info = ""
+        for cliente in clientes:
+            info += f"ID Cliente: {cliente.get_id_cliente()}, Empresa: {cliente.empresa}, Fecha de Ingreso: {cliente.cliente_ingreso}, Nacionalidad: {cliente.nacionalidad}\n"
+        if not info:
+            info = "No hay clientes registrados."
+        QMessageBox.information(self, "Clientes", info)
+
+    def eliminar_cliente_menu(self):
+        id_cliente, ok = QInputDialog.getText(self, "Eliminar Cliente", "Ingrese el ID del cliente a eliminar:")
+        if ok:
+            cliente = Cliente(0, 0, 0, 0).buscar_cliente(id_cliente, clientes)
+            if cliente:
+                cliente.eliminar_cliente(clientes)
+                QMessageBox.information(self, "Éxito", f"Cliente con ID {id_cliente} eliminado exitosamente.")
+            else:
+                QMessageBox.warning(self, "Error", "Cliente no encontrado.")
+
 app = QApplication(sys.argv)
 main_window = MainWindow()
+main_window.show()  
 sys.exit(app.exec())

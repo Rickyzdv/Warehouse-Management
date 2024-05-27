@@ -1,0 +1,4 @@
+Repisa|Ubicacion|ID
+80|U7|06
+30|D9|01
+60|H8|05

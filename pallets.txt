@@ -1,0 +1,2 @@
+ID Pallet|ID Cliente|ID Edificio|Fecha Ingreso|Fecha Egreso
+01|01|05|26/05/24|None
