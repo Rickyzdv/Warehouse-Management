@@ -240,6 +240,7 @@ def mostrar_clientes(clientes):
 
 #TOODO EL PROCESO DE LA CREACIÓN DEL GUI 
 
+#Colores de los wireframes
 COLORS = {
     "background": "#fafafa",
     "text": "#101010",
@@ -249,6 +250,7 @@ COLORS = {
     "nav_bar_text": "#fafafa",
 }
 
+#Fuentes que usaremos
 FONTS = {
     "title": QFont("Libre Franklin", 14, QFont.Weight.Bold),
     "text": QFont("Merriweather", 12),
@@ -278,29 +280,29 @@ class MainWindow(QMainWindow):
         title.setStyleSheet(f"color: {COLORS['text']}")
         layout.addWidget(title)
 
-        btn_edificios = QPushButton("Edificios")
-        btn_edificios.setFont(FONTS["text"])
-        btn_edificios.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_edificios.clicked.connect(self.show_edificio_menu)
-        layout.addWidget(btn_edificios)
+        boton_edificios = QPushButton("Edificios")
+        boton_edificios.setFont(FONTS["text"])
+        boton_edificios.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_edificios.clicked.connect(self.show_edificio_menu)
+        layout.addWidget(boton_edificios)
 
-        btn_pallets = QPushButton("Pallets")
-        btn_pallets.setFont(FONTS["text"])
-        btn_pallets.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_pallets.clicked.connect(self.show_pallet_menu)
-        layout.addWidget(btn_pallets)
+        boton_pallets = QPushButton("Pallets")
+        boton_pallets.setFont(FONTS["text"])
+        boton_pallets.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_pallets.clicked.connect(self.show_pallet_menu)
+        layout.addWidget(boton_pallets)
 
-        btn_clientes = QPushButton("Clientes")
-        btn_clientes.setFont(FONTS["text"])
-        btn_clientes.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_clientes.clicked.connect(self.show_cliente_menu)
-        layout.addWidget(btn_clientes)
+        boton_clientes = QPushButton("Clientes")
+        boton_clientes.setFont(FONTS["text"])
+        boton_clientes.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_clientes.clicked.connect(self.show_cliente_menu)
+        layout.addWidget(boton_clientes)
 
-        btn_salir = QPushButton("Salir")
-        btn_salir.setFont(FONTS["text"])
-        btn_salir.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_salir.clicked.connect(self.close_application)
-        layout.addWidget(btn_salir)
+        boton_salir = QPushButton("Salir")
+        boton_salir.setFont(FONTS["text"])
+        boton_salir.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_salir.clicked.connect(self.close_application)
+        layout.addWidget(boton_salir)
 
         self.setCentralWidget(central_widget)
 
@@ -320,10 +322,11 @@ class MainWindow(QMainWindow):
         self.close()
         self.cliente_menu = ClienteMenu(self)
         self.cliente_menu.show()
-    
+    #Implementado simplemente para cerrar ventanas al momento de querer abrir otra
     def close_application(self):
         sys.exit()
 
+#Ventana de edificios
 class EdificioMenu(QMainWindow):
     def __init__(self, main_window):
         super().__init__()
@@ -341,35 +344,35 @@ class EdificioMenu(QMainWindow):
         title.setStyleSheet(f"color: {COLORS['text']}")
         layout.addWidget(title)
 
-        btn_create = QPushButton("Crear Edificio")
-        btn_create.setFont(FONTS["text"])
-        btn_create.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_create.clicked.connect(self.crear_edificio)
-        layout.addWidget(btn_create)
+        boton_create_edificio = QPushButton("Crear Edificio")
+        boton_create_edificio.setFont(FONTS["text"])
+        boton_create_edificio.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_create_edificio.clicked.connect(self.crear_edificio)
+        layout.addWidget(boton_create_edificio)
 
-        btn_delete = QPushButton("Eliminar Edificio")
-        btn_delete.setFont(FONTS["text"])
-        btn_delete.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_delete.clicked.connect(self.eliminar_edificio_menu)
-        layout.addWidget(btn_delete)
+        boton_delete_edificio = QPushButton("Eliminar Edificio")
+        boton_delete_edificio.setFont(FONTS["text"])
+        boton_delete_edificio.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_delete_edificio.clicked.connect(self.eliminar_edificio_menu)
+        layout.addWidget(boton_delete_edificio)
 
-        btn_show_all = QPushButton("Mostrar Edificios")
-        btn_show_all.setFont(FONTS["text"])
-        btn_show_all.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_show_all.clicked.connect(self.mostrar_edificios)
-        layout.addWidget(btn_show_all)
+        boton_mostrar_edificios= QPushButton("Mostrar Edificios")
+        boton_mostrar_edificios.setFont(FONTS["text"])
+        boton_mostrar_edificios.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_mostrar_edificios.clicked.connect(self.mostrar_edificios)
+        layout.addWidget(boton_mostrar_edificios)
 
-        btn_show_info = QPushButton("Mostrar información de un edificio")
-        btn_show_info.setFont(FONTS["text"])
-        btn_show_info.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_show_info.clicked.connect(self.mostrar_info_edificio)
-        layout.addWidget(btn_show_info)
+        boton_mostrar_info_edificio= QPushButton("Mostrar información de un edificio")
+        boton_mostrar_info_edificio.setFont(FONTS["text"])
+        boton_mostrar_info_edificio.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_mostrar_info_edificio.clicked.connect(self.mostrar_info_edificio)
+        layout.addWidget(boton_mostrar_info_edificio)
 
-        btn_back = QPushButton("Volver al menú principal")
-        btn_back.setFont(FONTS["text"])
-        btn_back.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_back.clicked.connect(self.back_to_main)
-        layout.addWidget(btn_back)
+        boton_volver= QPushButton("Volver al menú principal")
+        boton_volver.setFont(FONTS["text"])
+        boton_volver.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_volver.clicked.connect(self.back_to_main)
+        layout.addWidget(boton_volver)
 
         self.setCentralWidget(central_widget)
 
@@ -419,7 +422,7 @@ class EdificioMenu(QMainWindow):
                 QMessageBox.information(self, "Información del Edificio", info)
             else:
                 QMessageBox.warning(self, "Error", "Edificio no encontrado.")
-
+#Ventana de pallets
 class PalletMenu(QMainWindow):
     def __init__(self, main_window):
         super().__init__()
@@ -437,41 +440,41 @@ class PalletMenu(QMainWindow):
         title.setStyleSheet(f"color: {COLORS['text']}")
         layout.addWidget(title)
 
-        btn_create = QPushButton("Registrar Pallet")
-        btn_create.setFont(FONTS["text"])
-        btn_create.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_create.clicked.connect(self.crear_pallet)
-        layout.addWidget(btn_create)
+        boton_create_pallet = QPushButton("Registrar Pallet")
+        boton_create_pallet.setFont(FONTS["text"])
+        boton_create_pallet.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_create_pallet.clicked.connect(self.crear_pallet)
+        layout.addWidget(boton_create_pallet)
 
-        btn_modify = QPushButton("Modificar Edificio de un Pallet")
-        btn_modify.setFont(FONTS["text"])
-        btn_modify.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_modify.clicked.connect(self.modificar_pallet)
-        layout.addWidget(btn_modify)
+        boton_mover_de_edificio= QPushButton("Modificar Edificio de un Pallet")
+        boton_mover_de_edificio.setFont(FONTS["text"])
+        boton_mover_de_edificio.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_mover_de_edificio.clicked.connect(self.modificar_pallet)
+        layout.addWidget(boton_mover_de_edificio)
 
-        btn_delete = QPushButton("Eliminar Pallet")
-        btn_delete.setFont(FONTS["text"])
-        btn_delete.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_delete.clicked.connect(self.eliminar_pallet_menu)
-        layout.addWidget(btn_delete)
+        boton_delete_pallet = QPushButton("Eliminar Pallet")
+        boton_delete_pallet.setFont(FONTS["text"])
+        boton_delete_pallet.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_delete_pallet.clicked.connect(self.eliminar_pallet_menu)
+        layout.addWidget(boton_delete_pallet)
 
-        btn_show_all = QPushButton("Mostrar Pallets")
-        btn_show_all.setFont(FONTS["text"])
-        btn_show_all.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_show_all.clicked.connect(self.mostrar_pallets)
-        layout.addWidget(btn_show_all)
+        boton_mostrar_pallets= QPushButton("Mostrar Pallets")
+        boton_mostrar_pallets.setFont(FONTS["text"])
+        boton_mostrar_pallets.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_mostrar_pallets.clicked.connect(self.mostrar_pallets)
+        layout.addWidget(boton_mostrar_pallets)
 
-        btn_show_info = QPushButton("Mostrar información de un pallet")
-        btn_show_info.setFont(FONTS["text"])
-        btn_show_info.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_show_info.clicked.connect(self.mostrar_info_pallet)
-        layout.addWidget(btn_show_info)
+        boton_mostrar_un_pallet= QPushButton("Mostrar información de un pallet")
+        boton_mostrar_un_pallet.setFont(FONTS["text"])
+        boton_mostrar_un_pallet.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_mostrar_un_pallet.clicked.connect(self.mostrar_info_pallet)
+        layout.addWidget(boton_mostrar_un_pallet)
 
-        btn_back = QPushButton("Volver al menú principal")
-        btn_back.setFont(FONTS["text"])
-        btn_back.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_back.clicked.connect(self.back_to_main)
-        layout.addWidget(btn_back)
+        boton_volver = QPushButton("Volver al menú principal")
+        boton_volver.setFont(FONTS["text"])
+        boton_volver.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_volver.clicked.connect(self.back_to_main)
+        layout.addWidget(boton_volver)
 
         self.setCentralWidget(central_widget)
 
@@ -482,19 +485,27 @@ class PalletMenu(QMainWindow):
     def crear_pallet(self):
         id_pallet, ok = QInputDialog.getText(self, "Registrar Pallet", "Ingrese el ID del pallet:")
         if ok:
-            id_cliente, ok = QInputDialog.getText(self, "Registrar Pallet", "Ingrese el ID del cliente:")
-            if ok:
-                id_edificio, ok = QInputDialog.getText(self, "Registrar Pallet", "Ingrese el ID del edificio:")
+                id_cliente, ok = QInputDialog.getText(self, "Registrar Pallet", "Ingrese el ID del cliente:")
                 if ok:
-                    fecha_ingreso, ok = QInputDialog.getText(self, "Registrar Pallet", "Ingrese la fecha de ingreso:")
+                    if not Pallet(0, 0, 0, 0).validar_cliente(id_cliente, clientes):
+                        QMessageBox.warning(self, "Error", "El ID del cliente no es válido.")
+                        return
+                    
+                    id_edificio, ok = QInputDialog.getText(self, "Registrar Pallet", "Ingrese el ID del edificio:")
                     if ok:
-                        if not Pallet(0, 0, 0, 0).validar_pallet(id_pallet, inventario):
-                            pallet_nuevo = Pallet(id_pallet, id_cliente, id_edificio, fecha_ingreso)
-                            inventario.append(pallet_nuevo)
-                            pallet_nuevo.guardar_info()
-                            QMessageBox.information(self, "Éxito", "Pallet registrado y guardado exitosamente")
-                        else:
-                            QMessageBox.warning(self, "Error", "¡El ID ya existe! Introduce un ID diferente.")
+                        if not Pallet(0, 0, 0, 0).validar_edificio(id_edificio, edificios):
+                            QMessageBox.warning(self, "Error", "El ID del edificio no es válido.")
+                            return
+                        
+                        fecha_ingreso, ok = QInputDialog.getText(self, "Registrar Pallet", "Ingrese la fecha de ingreso:")
+                        if ok:
+                            if not Pallet(0, 0, 0, 0).validar_pallet(id_pallet, inventario):
+                                pallet_nuevo = Pallet(id_pallet, id_cliente, id_edificio, fecha_ingreso)
+                                inventario.append(pallet_nuevo)
+                                pallet_nuevo.guardar_info()
+                                QMessageBox.information(self, "Éxito", "Pallet registrado y guardado exitosamente")
+                            else:
+                                QMessageBox.warning(self, "Error", "¡El ID ya existe! Introduce un ID diferente.")
 
     def modificar_pallet(self):
         id_pallet, ok = QInputDialog.getText(self, "Modificar Pallet", "Ingrese el ID del pallet a modificar:")
@@ -538,7 +549,7 @@ class PalletMenu(QMainWindow):
                 QMessageBox.information(self, "Información del Pallet", info)
             else:
                 QMessageBox.warning(self, "Error", "Pallet no encontrada.")
-
+#Ventana de cliente
 class ClienteMenu(QMainWindow):
     def __init__(self, main_window):
         super().__init__()
@@ -556,35 +567,35 @@ class ClienteMenu(QMainWindow):
         title.setStyleSheet(f"color: {COLORS['text']}")
         layout.addWidget(title)
 
-        btn_create = QPushButton("Crear Cliente")
-        btn_create.setFont(FONTS["text"])
-        btn_create.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_create.clicked.connect(self.crear_cliente)
-        layout.addWidget(btn_create)
+        boton_create_cliente = QPushButton("Crear Cliente")
+        boton_create_cliente.setFont(FONTS["text"])
+        boton_create_cliente.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_create_cliente.clicked.connect(self.crear_cliente)
+        layout.addWidget(boton_create_cliente)
 
-        btn_show_info = QPushButton("Mostrar información de Cliente")
-        btn_show_info.setFont(FONTS["text"])
-        btn_show_info.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_show_info.clicked.connect(self.mostrar_info_cliente)
-        layout.addWidget(btn_show_info)
+        boton_mostrar_info_cliente = QPushButton("Mostrar información de Cliente")
+        boton_mostrar_info_cliente.setFont(FONTS["text"])
+        boton_mostrar_info_cliente.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_mostrar_info_cliente.clicked.connect(self.mostrar_info_cliente)
+        layout.addWidget(boton_mostrar_info_cliente)
 
-        btn_show_all = QPushButton("Mostrar información de todos los Clientes")
-        btn_show_all.setFont(FONTS["text"])
-        btn_show_all.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_show_all.clicked.connect(self.mostrar_clientes)
-        layout.addWidget(btn_show_all)
+        boton_mostrar_clientes = QPushButton("Mostrar información de todos los Clientes")
+        boton_mostrar_clientes.setFont(FONTS["text"])
+        boton_mostrar_clientes.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_mostrar_clientes.clicked.connect(self.mostrar_clientes)
+        layout.addWidget(boton_mostrar_clientes)
 
-        btn_delete = QPushButton("Eliminar Cliente")
-        btn_delete.setFont(FONTS["text"])
-        btn_delete.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_delete.clicked.connect(self.eliminar_cliente_menu)
-        layout.addWidget(btn_delete)
+        boton_delete_cliente = QPushButton("Eliminar Cliente")
+        boton_delete_cliente.setFont(FONTS["text"])
+        boton_delete_cliente.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_delete_cliente.clicked.connect(self.eliminar_cliente_menu)
+        layout.addWidget(boton_delete_cliente)
 
-        btn_back = QPushButton("Volver al menú principal")
-        btn_back.setFont(FONTS["text"])
-        btn_back.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
-        btn_back.clicked.connect(self.back_to_main)
-        layout.addWidget(btn_back)
+        boton_volver = QPushButton("Volver al menú principal")
+        boton_volver.setFont(FONTS["text"])
+        boton_volver.setStyleSheet(f"background-color: {COLORS['button']}; color: {COLORS['button_text']}")
+        boton_volver.clicked.connect(self.back_to_main)
+        layout.addWidget(boton_volver)
 
         self.setCentralWidget(central_widget)
 
