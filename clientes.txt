@@ -1,2 +1,0 @@
-ID Cliente|Empresa|Fecha de Ingreso|Nacionalidad
-01|CacaSeca|26/05/24|Gringo
